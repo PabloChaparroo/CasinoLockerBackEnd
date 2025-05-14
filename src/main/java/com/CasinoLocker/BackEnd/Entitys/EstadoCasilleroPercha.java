@@ -10,7 +10,7 @@ import lombok.Builder;
 import java.time.LocalDate;
 
 @Entity
-@Table(name ="conf_estado_casillero_percha")
+@Table(name ="estado_casillero_percha")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
