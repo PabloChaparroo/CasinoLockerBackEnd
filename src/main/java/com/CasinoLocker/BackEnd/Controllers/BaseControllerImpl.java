@@ -43,6 +43,7 @@ public abstract class BaseControllerImpl<E extends BaseEntity, S extends BaseSer
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody E entity){
         try {
+            entity.setId(null);
             return ResponseEntity.status(HttpStatus.OK).body(servicio.save(entity));
         } catch(Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\" Error\"}");

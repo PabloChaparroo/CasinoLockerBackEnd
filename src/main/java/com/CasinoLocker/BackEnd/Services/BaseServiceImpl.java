@@ -72,7 +72,7 @@ public abstract class BaseServiceImpl<E extends BaseEntity, ID extends Serializa
         try {
             Optional<E> getEntity = baseRespository.findById(id);
             E entityUpdate = getEntity.get();
-            baseRespository.save(entityUpdate);
+            baseRespository.save(entity);
             return entityUpdate;
         } catch (Exception e){
             throw new Exception(e.getMessage());

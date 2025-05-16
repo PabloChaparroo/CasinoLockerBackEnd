@@ -30,7 +30,7 @@ public class EstadoCasilleroPercha extends BaseEntity{
     private LocalDate fechaModificacionEstadoCasilleroPercha;
 
     @Column(name = "fecha_baja_estado_casillero_percha")
-    private LocalDate fechaBajaestadoCasilleroPercha;
+    private LocalDate fechaBajaEstadoCasilleroPercha;
 
 
 }
