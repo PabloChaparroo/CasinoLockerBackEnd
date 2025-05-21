@@ -17,8 +17,6 @@ public class Cliente extends BaseEntity{
     //Atributos
     @Column(name = "nombre_cliente")
     private String nombreCliente;
-    @Column(name = "apellido_cliente")
-    private String apellidoCliente;
     @Column(name = "dni_cliente")
     private int dniCliente;
     @Column(name = "telefono_cliente")
