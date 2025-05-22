@@ -31,7 +31,7 @@ public class Percha extends BaseEntity {
 
     //Relaciones
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "percha_id")
+    @JoinColumn(name = "fk_estado_casillero_percha")
     private EstadoCasilleroPercha estadoCasilleroPercha;
 
 }

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name ="abrigo_percha")
@@ -23,9 +25,13 @@ public class AbrigoPercha extends BaseEntity {
     private LocalDateTime horaIngresoAbrigoPercha;
 
     //Relaciones
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "fk_reserva_id")
+    private Reserva reserva;
+
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "abrigo_percha_id")
-    private Percha abrigoPercha;
+    @JoinColumn(name = "fk_percha_id")
+    private Percha percha;
 
 
 

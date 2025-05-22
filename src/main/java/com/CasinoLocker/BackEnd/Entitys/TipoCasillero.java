@@ -11,7 +11,7 @@ import lombok.Builder;
 import java.time.LocalDate;
 
 @Entity
-@Table(name ="conf_tipo_casillero")
+@Table(name ="tipo_casillero")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

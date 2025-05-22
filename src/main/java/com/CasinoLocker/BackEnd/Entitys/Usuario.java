@@ -16,12 +16,17 @@ import java.time.LocalDate;
 @Builder
 public class Usuario extends BaseEntity{
 
+    @Column(name = "nombre_usuario")
+    private String nombreUsuario;
 
-    @Column(name = "username", nullable = false)
-    private String username;
+    @Column(name = "dni_usuario")
+    private String dniUsuario;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "email_usuario")
+    private String emailUsuario;
+
+    @Column(name = "descripcion_usuario")
+    private String descripcionUsuario;
 
     @Column(name = "fecha_alta_usuario")
     private LocalDate fechaAltaUsuario;
@@ -35,9 +40,8 @@ public class Usuario extends BaseEntity{
     @Column(name = "estado_usuario")
     private EstadoUsuario estadoUsuario;
 
-    //relacion con TipoUsuario
-    @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "usuario_id")
-    private TipoUsuario tipoUsuario;
+
+
+
 
 }
