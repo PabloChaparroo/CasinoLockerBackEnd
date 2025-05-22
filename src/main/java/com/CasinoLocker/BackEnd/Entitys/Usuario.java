@@ -16,6 +16,8 @@ import java.time.LocalDate;
 @Builder
 public class Usuario extends BaseEntity{
 
+    @Column(name = "nombre_usuario", nullable = false)
+    private String nombre;
 
     @Column(name = "username", nullable = false)
     private String username;
