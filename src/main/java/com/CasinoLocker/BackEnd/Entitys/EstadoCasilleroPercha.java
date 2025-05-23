@@ -32,5 +32,8 @@ public class EstadoCasilleroPercha extends BaseEntity{
     @Column(name = "fecha_baja_estado_casillero_percha")
     private LocalDate fechaBajaEstadoCasilleroPercha;
 
+    @Column(name = "Reservable")
+    private boolean reservable;
+
 
 }
