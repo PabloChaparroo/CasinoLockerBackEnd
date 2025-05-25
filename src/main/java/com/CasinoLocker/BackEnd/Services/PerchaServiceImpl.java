@@ -23,6 +23,10 @@ public class PerchaServiceImpl implements PerchaService {
     public List<Percha> getAll() {
         return perchaRepository.findAll();
     }
+    @Override
+    public List<Percha> findAllActivas() {
+        return perchaRepository.findByFechaBajaPerchaIsNull();
+    }
 
     @Override
     public Percha getById(Long id) {

@@ -18,8 +18,12 @@ public class PerchaController {
     private final PerchaService perchaService;
 
     @GetMapping
-    public List<Percha> getAll() {
-        return perchaService.getAll();
+    public List<Percha> getAllPerchas(@RequestParam(defaultValue = "false") boolean showDeleted) {
+        if (showDeleted) {
+            return perchaService.getAll();
+        } else {
+            return perchaService.findAllActivas(); // Solo las que no están dadas de baja
+        }
     }
 
     @GetMapping("/{id}")

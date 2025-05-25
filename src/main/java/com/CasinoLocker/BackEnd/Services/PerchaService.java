@@ -12,5 +12,5 @@ public interface PerchaService {
     Percha update(Long id, Percha percha);
     Percha darDeBaja(Long id);
     Percha darDeAlta(Long id);
-
+    List<Percha> findAllActivas();
 }
