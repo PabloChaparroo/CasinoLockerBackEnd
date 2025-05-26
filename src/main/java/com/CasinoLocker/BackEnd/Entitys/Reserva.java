@@ -35,25 +35,27 @@ public class Reserva extends BaseEntity {
     private EstadoReserva estadoReserva;
 
     //Relacion con objeto
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) //Si se elimina una reserva entonces también se eliminan sus objetos relacionados
+    @OneToMany
+    @JoinColumn(name = "fk_reserva_id")
     private List<Objeto> objetoList = new ArrayList<Objeto>();
 
     //Relacion con Casillero
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "reserva_casillero_id")
+    @JoinColumn(name = "fk_casillero_id")
     private Casillero casillero;
 
     //Relacion con Usuario
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "reserva_usuario_id")
+    @JoinColumn(name = "fk_usuario_id")
     private Usuario usuario;
 
     //Relacion con Cliente
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "reserva_cliente_id")
+    @JoinColumn(name = "fk_cliente_id")
     private Cliente cliente;
 
     //Relacion con AbrigoPercha
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AbrigoPercha> abrigoPerchasList = new ArrayList<AbrigoPercha>();
+    //@OneToMany
+    //@JoinColumn(name = "fk_reserva_id")
+    //private List<AbrigoPercha> abrigoPerchasList = new ArrayList<AbrigoPercha>();
 }

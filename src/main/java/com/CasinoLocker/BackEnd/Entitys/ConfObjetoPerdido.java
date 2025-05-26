@@ -30,12 +30,13 @@ public class ConfObjetoPerdido extends BaseEntity {
     private LocalDateTime fechaBajaConfObjetoPerdido;
 
     //Relacion con objeto
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) //Si se elimina una cofg entonces también se eliminan sus objetos relacionados
-    private List<Objeto> objeto = new ArrayList<Objeto>();
+    @OneToMany
+    @JoinColumn(name = "fk_confObjetoPerdido_id")
+    private List<Objeto> objetos = new ArrayList<>();
 
     //Relacion con Casillero
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "conf_objeto_perdido_id")
+    @JoinColumn(name = "fk_casillero_id")
     private Casillero casillero;
 
 

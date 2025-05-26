@@ -30,11 +30,11 @@ public class Casillero extends BaseEntity{
 
     //Relacion con TipoCasillero
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "casillero_tipoCasillero_id")
+    @JoinColumn(name = "fk_tipoCasillero_id")
     private TipoCasillero tipoCasillero;
 
     //Relacion con EstadoCasilleroPercha
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "casillero_estadoCasillero_id")
+    @JoinColumn(name = "fk_estadoCasillero_id")
     private EstadoCasilleroPercha estadoCasilleroPercha;
 }
