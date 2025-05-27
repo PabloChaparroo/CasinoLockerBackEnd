@@ -14,15 +14,11 @@ public class RegisterEmployeeRequest {
     String provisionalPassword;
     int idRole;
 
+    int dniEmpleado;
+    String descripcionEmpleado;
     String nombreEmpleado;
     String apellidoEmpleado;
     int telefonoEmpleado;
     String mailEmpleado;
 
-    //Domicilio
-    //String calleDomicilioEmpreado;
-    //int nroCalleDomicilioEmpleado;
-    //String descripcionDomicilioEmplreado;
-    //String localidadDomicilioEmpleado;
-    //String provinciaDomicilioEmpleado;
 }

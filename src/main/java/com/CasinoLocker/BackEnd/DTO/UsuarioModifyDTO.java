@@ -1,4 +1,4 @@
-package com.CasinoLocker.BackEnd.Auth;
+package com.CasinoLocker.BackEnd.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,17 +9,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
+public class UsuarioModifyDTO {
+    Long idUsuario;
+    int idRole;
 
-    int id;
-    String username;
-    String password;
-
-    int dniUsuario;
-    String descripcionUsuario;
     String nombreUsuario;
     String apellidoUsuario;
     int telefonoUsuario;
+    int dniUsuario;
+    String descripcionUsuario;
     String emailUsuario;
-
 }

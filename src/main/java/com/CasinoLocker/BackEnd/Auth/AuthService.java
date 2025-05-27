@@ -1,15 +1,18 @@
 package com.CasinoLocker.BackEnd.Auth;
 
-import com.Capinteria.carpinteria.Entity.Usuario;
-import com.Capinteria.carpinteria.Jwt.JwtService;
-import com.Capinteria.carpinteria.Repositories.UsuarioRepository;
-import com.Capinteria.carpinteria.enumeration.EstadoCliente;
-import com.Capinteria.carpinteria.enumeration.Role;
+import com.CasinoLocker.BackEnd.Auth.RegisterRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.CasinoLocker.BackEnd.Entitys.Perfil;
+import com.CasinoLocker.BackEnd.Entitys.Usuario;
+import com.CasinoLocker.BackEnd.Enum.EstadoUsuario;
+import com.CasinoLocker.BackEnd.Enum.Role;
+import com.CasinoLocker.BackEnd.Jwt.JwtService;
+import com.CasinoLocker.BackEnd.Repositories.PerfilRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +22,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UsuarioRepository usuarioRepository;
+    private final PerfilRepository perfilRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -27,49 +30,49 @@ public class AuthService {
 
 
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        UserDetails user=usuarioRepository.findByUsername(request.getUsername()).orElseThrow();
-        String token=jwtService.getToken(user);
+    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+    Perfil user = perfilRepository.findByUsername(request.getUsername()).orElseThrow();
+    String token = jwtService.getToken(user);
 
-        return AuthResponse.builder()
-                .token(token)
-                .build();
-    }
+    return AuthResponse.builder()
+            .token(token)
+            .nombreUsuario(user.getUsuario().getNombreUsuario())
+            .username(user.getUsername())
+            .dniUsuario(user.getUsuario().getDniUsuario())
+            .emailUsuario(user.getUsuario().getEmailUsuario())
+            .telefonoUsuario(user.getUsuario().getTelefonoUsuario())
+            .build();
+}
 
     public AuthResponse register(RegisterRequest request) {
 
-        /*Domicilio domicilio = Domicilio.builder()
-                .calleDomicilio(request.calleDomicilio)
-                .nroCalleDomicilio(request.getNroCalleDomicilio())
-                .descripcionDomicilio(request.descripcionDomicilio)
-                .localidadDomicilio(request.getLocalidadDomicilio())
-                .provinciaDomicilio(request.getProvinciaDomicilio())
-
-                .build();*/
-
-        Cliente cliente = Cliente.builder()
-                .nombreCliente(request.getNombreCliente())
-                .apellidoCliente(request.getApellidoCliente())
-                .telefonoCliente(request.getTelefonoCliente())
-                .mailCliente(request.getMailCliente())
-                .fechaHoraAltaCliente(LocalDate.now())
-                .estadoCliente(EstadoCliente.ALTA)
+        Usuario usuario = Usuario.builder()
+                .nombreUsuario(request.getNombreUsuario())
+                .emailUsuario(request.getEmailUsuario())
+                .dniUsuario(request.getDniUsuario())
+                .descripcionUsuario(request.getDescripcionUsuario())
+                .telefonoUsuario(request.getTelefonoUsuario())
+                .fechaAltaUsuario(LocalDate.now())
+                .estadoUsuario(EstadoUsuario.USUARIO_HABILITADO)
                 .build();
 
-        //cliente.agregarDomicilio(domicilio);
-
-        Usuario user = Usuario.builder()
+        Perfil user = Perfil.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .fechaAltaUsuario(LocalDate.now())
-                .role(Role.CLIENTE)
+                .fechaAltaPerfil(LocalDate.now())
+                .role(Role.EMPLEADO)
                 .build();
 
-        user.setCliente(cliente);
-        usuarioRepository.save(user);
+        user.setUsuario(usuario);
+        perfilRepository.save(user);
 
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
+                .nombreUsuario(usuario.getNombreUsuario())
+                .username(user.getUsername())
+                .dniUsuario(user.getUsuario().getDniUsuario())
+                .emailUsuario(user.getUsuario().getEmailUsuario())
+                .telefonoUsuario(user.getUsuario().getTelefonoUsuario())
                 .build();
 
     }
@@ -77,37 +80,33 @@ public class AuthService {
     public AuthResponse registerEmployee(RegisterEmployeeRequest request) {
 
 
-
-       /* Domicilio domicilio = Domicilio.builder()
-                .calleDomicilio(request.calleDomicilioEmpreado)
-                .nroCalleDomicilio(request.nroCalleDomicilioEmpleado)
-                .descripcionDomicilio(request.descripcionDomicilioEmplreado)
-                .localidadDomicilio(request.localidadDomicilioEmpleado)
-                .provinciaDomicilio(request.provinciaDomicilioEmpleado)
-                .fechaHoraAltaDomicilio(LocalDate.now())
-                .build();*/
-
-        Cliente cliente = Cliente.builder()
-                .nombreCliente(request.getNombreEmpleado())
-                .apellidoCliente(request.getApellidoEmpleado())
-                .telefonoCliente(request.getTelefonoEmpleado())
-                .mailCliente(request.getMailEmpleado())
-                .fechaHoraAltaCliente(LocalDate.now())
-                .estadoCliente(EstadoCliente.ALTA)
+        Usuario usuario = Usuario.builder()
+                .nombreUsuario(request.getNombreEmpleado())                
+                .emailUsuario(request.getMailEmpleado())
+                .dniUsuario(request.getDniEmpleado())
+                .descripcionUsuario(request.getDescripcionEmpleado())
+                .telefonoUsuario(request.getTelefonoEmpleado())
+                .fechaAltaUsuario(LocalDate.now())
+                .estadoUsuario(EstadoUsuario.USUARIO_HABILITADO)
                 .build();
 
-        Usuario user = Usuario.builder()
+        Perfil user = Perfil.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.provisionalPassword))
-                .fechaAltaUsuario(LocalDate.now())
+                .fechaAltaPerfil(LocalDate.now())
                 .role(Role.EMPLEADO) //ver numeracion de roles
                 .build();
 
-        user.setCliente(cliente);
-        usuarioRepository.save(user);
+        user.setUsuario(usuario);
+        perfilRepository.save(user);
 
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
+                .nombreUsuario(usuario.getNombreUsuario())
+                .username(user.getUsername())
+                .dniUsuario(user.getUsuario().getDniUsuario())
+                .emailUsuario(user.getUsuario().getEmailUsuario())
+                .telefonoUsuario(user.getUsuario().getTelefonoUsuario())
                 .build();
 
     }

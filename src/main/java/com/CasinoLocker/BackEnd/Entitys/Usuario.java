@@ -16,16 +16,16 @@ import java.time.LocalDate;
 @Builder
 public class Usuario extends BaseEntity{
 
-<<<<<<< HEAD
+
     @Column(name = "nombre_usuario", nullable = false)
-    private String nombre;
-=======
-    @Column(name = "nombre_usuario")
     private String nombreUsuario;
->>>>>>> master
+
 
     @Column(name = "dni_usuario")
-    private String dniUsuario;
+    private int dniUsuario;
+
+    @Column(name = "telefono_usuario")
+    private int telefonoUsuario;
 
     @Column(name = "email_usuario")
     private String emailUsuario;

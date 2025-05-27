@@ -17,6 +17,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.CasinoLocker.BackEnd.Jwt.JwtAuthenticationFilter;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -74,12 +76,12 @@ public class SecurityConfig {
 
 
                                 //Segun el rol
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/cliente/showProfile")).hasAnyAuthority( "CLIENTE")
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/cliente/updateProfile")).hasAnyAuthority("CLIENTE")
+                                .requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/showProfile")).hasAnyAuthority( "USUARIO")
+                                .requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/updateProfile")).hasAnyAuthority("USUARIO")
 
                                 .requestMatchers(new AntPathRequestMatcher("/auth/registerEmployee")).hasAuthority("ADMIN") //Autenticacion
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/cliente/modifyCliente")).hasAuthority("ADMIN")
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/cliente/deleteCliente")).hasAuthority("ADMIN")
+                                .requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/modifyusuario")).hasAuthority("ADMIN")
+                                .requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/deleteusuario")).hasAuthority("ADMIN")
 
 
                 )

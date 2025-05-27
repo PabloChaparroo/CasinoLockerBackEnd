@@ -1,24 +1,34 @@
 package com.CasinoLocker.BackEnd.Entitys;
 
-<<<<<<< HEAD
-public class Perfil {
-=======
+
 import com.CasinoLocker.BackEnd.Enum.EstadoPerfil;
+import com.CasinoLocker.BackEnd.Enum.Role;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name ="perfil")
-@Data
-@AllArgsConstructor
+@Table(name ="perfil" , uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Perfil extends BaseEntity {
+public class Perfil extends BaseEntity implements UserDetails {
 
     @Column(name = "username", nullable = false)
     private String username;
@@ -37,6 +47,9 @@ public class Perfil extends BaseEntity {
 
     private EstadoPerfil estadoPerfil;
 
+     @Column(name = "role")
+    private Role role;
+
     //Relacion usuario
     @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id")
@@ -46,5 +59,31 @@ public class Perfil extends BaseEntity {
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "fk_tipoPerfil_id")
     private TipoPerfil tipoPerfil;
->>>>>>> master
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+    
+
 }
