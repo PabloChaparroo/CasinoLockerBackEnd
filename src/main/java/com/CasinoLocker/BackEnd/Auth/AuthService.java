@@ -30,12 +30,21 @@ public class AuthService {
 
 
     public AuthResponse login(LoginRequest request) {
-    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+    );
     Perfil user = perfilRepository.findByUsername(request.getUsername()).orElseThrow();
+
+    // Validar estado del usuario
+    if (user.getUsuario().getEstadoUsuario() != EstadoUsuario.USUARIO_HABILITADO) {
+        throw new RuntimeException("El usuario no está habilitado para iniciar sesión.");
+    }
+
     String token = jwtService.getToken(user);
 
     return AuthResponse.builder()
             .token(token)
+            .id(user.getUsuario().getId())
             .nombreUsuario(user.getUsuario().getNombreUsuario())
             .username(user.getUsername())
             .dniUsuario(user.getUsuario().getDniUsuario())
@@ -47,6 +56,7 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
 
         Usuario usuario = Usuario.builder()
+                
                 .nombreUsuario(request.getNombreUsuario())
                 .emailUsuario(request.getEmailUsuario())
                 .dniUsuario(request.getDniUsuario())
@@ -68,6 +78,7 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
+                .id(user.getUsuario().getId())
                 .nombreUsuario(usuario.getNombreUsuario())
                 .username(user.getUsername())
                 .dniUsuario(user.getUsuario().getDniUsuario())
@@ -102,6 +113,7 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
+                .id(usuario.getId())
                 .nombreUsuario(usuario.getNombreUsuario())
                 .username(user.getUsername())
                 .dniUsuario(user.getUsuario().getDniUsuario())

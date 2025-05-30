@@ -2,16 +2,22 @@ package com.CasinoLocker.BackEnd.Services;
 
 import com.CasinoLocker.BackEnd.DTO.UsuarioDTO;
 import com.CasinoLocker.BackEnd.DTO.UsuarioModifyDTO;
+import com.CasinoLocker.BackEnd.DTO.UsuarioTablaDTO;
+import com.CasinoLocker.BackEnd.Entitys.Casillero;
 import com.CasinoLocker.BackEnd.Entitys.Cliente;
 import com.CasinoLocker.BackEnd.Entitys.Perfil;
 import com.CasinoLocker.BackEnd.Entitys.Usuario;
 import com.CasinoLocker.BackEnd.Enum.EstadoUsuario;
+import com.CasinoLocker.BackEnd.Enum.Role;
 import com.CasinoLocker.BackEnd.Jwt.JwtService;
 import com.CasinoLocker.BackEnd.Repositories.BaseRepository;
 import com.CasinoLocker.BackEnd.Repositories.PerfilRepository;
 import com.CasinoLocker.BackEnd.Repositories.UsuarioRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.time.LocalDate;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,4 +162,51 @@ public class UsuarioServiceImpl extends BaseServiceImpl<Usuario,Long> implements
         // Implementación para buscar un Usuario por su correo electrónico en el repositorio
         return usuarioRepository.findByEmailUsuario(emailUsuario);
     }
+
+   @Override
+@Transactional
+public Usuario restaurarUsuario(Long id) throws Exception {
+    Usuario usuarioExistente = findById(id);
+    if (usuarioExistente.getFechaBajaUsuario() == null) {
+        throw new Exception("usuario no está dado de baja");
+    }
+    usuarioExistente.setFechaBajaUsuario(null);
+    usuarioExistente.setEstadoUsuario(EstadoUsuario.USUARIO_HABILITADO); // Restaurar estado
+
+    Perfil perfil = perfilRepository.findPerfilByUsuarioId(id);
+    if (perfil != null) {
+        perfil.setFechaBajaPerfil(null); // Restaurar perfil
+        perfilRepository.save(perfil);
+    }
+
+    return usuarioRepository.save(usuarioExistente);
+}
+
+@Override
+public List<UsuarioTablaDTO> getUsuariosTabla() throws Exception {
+    try {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<UsuarioTablaDTO> dtos = usuarios.stream().map(usuario -> {
+            Perfil perfil = perfilRepository.findPerfilByUsuarioId(usuario.getId());
+            Role role = perfil != null ? perfil.getRole() : null; // Usa Role, no String
+            return new UsuarioTablaDTO(
+                usuario.getId(),
+                usuario.getNombreUsuario(),
+                usuario.getDniUsuario(),
+                usuario.getTelefonoUsuario(),
+                usuario.getEmailUsuario(),
+                usuario.getDescripcionUsuario(),
+                usuario.getFechaAltaUsuario(),
+                usuario.getFechaBajaUsuario(),
+                usuario.getFechaModificacionUsuario(),
+                usuario.getEstadoUsuario(),
+                role
+            );
+        }).toList();
+        return dtos;
+    } catch (Exception e) {
+        throw new Exception("Error al obtener usuarios para la tabla: " + e.getMessage());
+    }
+}
+
 }

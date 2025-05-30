@@ -15,7 +15,7 @@ public class UsuarioDTO {
     
     
     String username;
-
+    
     Long id;
     String nombreUsuario;
     String apellidoUsuario;
@@ -23,5 +23,5 @@ public class UsuarioDTO {
     int dniUsuario;
     String emailUsuario;
     String descripcionUsuario;
-    LocalDate fechaHoraModificacionUsuario;
+    
 }

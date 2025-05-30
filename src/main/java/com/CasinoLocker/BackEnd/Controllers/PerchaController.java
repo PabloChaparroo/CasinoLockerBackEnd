@@ -13,7 +13,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "api/perchas")
 @RequiredArgsConstructor
-public class PerchaController {
+public class PerchaController  {
 
     private final PerchaService perchaService;
 

@@ -1,31 +1,25 @@
 package com.CasinoLocker.BackEnd.Enum;
 
-
-
 public enum Role {
-
-    ADMIN, EMPLEADO
-
-
-    /*
-    CLIENTE(1),
-    ADMIN(2),
-    EMPLEADO(3);
+    ADMIN(1),
+    EMPLEADO(2);
 
     private final int valorNumerico;
-    Role(int valorNumerico){
+
+    Role(int valorNumerico) {
         this.valorNumerico = valorNumerico;
     }
-    public int getValorNumerico(){
+
+    public int getValorNumerico() {
         return valorNumerico;
     }
-    public static Role fromValorNumerico(int valor){
-        for(Role estado: values()){
-            if (estado.valorNumerico == valor){
-                return estado;
+
+    public static Role fromValorNumerico(int valor) {
+        for (Role role : values()) {
+            if (role.valorNumerico == valor) {
+                return role;
             }
         }
         return null;
     }
-¨*/
 }

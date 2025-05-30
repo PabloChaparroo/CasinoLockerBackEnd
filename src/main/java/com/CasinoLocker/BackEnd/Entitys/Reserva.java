@@ -1,6 +1,8 @@
 package com.CasinoLocker.BackEnd.Entitys;
 import com.CasinoLocker.BackEnd.Enum.EstadoReserva;
 import com.CasinoLocker.BackEnd.Enum.EstadoUsuario;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,16 +30,21 @@ public class Reserva extends BaseEntity {
     @Column(name = "fecha_modificación_reserva")
     private LocalDateTime fechaModificacionReserva;
 
+    @Column(name = "fecha_Finalizacion_reserva")
+    private LocalDateTime fechaFinalizacionReserva;
+
     @Column(name = "fecha_baja_reserva")
     private LocalDateTime fechaBajaReserva;
 
+    @Enumerated(EnumType.STRING)  // Esto es importante para usar los nombres textuales
     @Column(name = "estado_reserva")
     private EstadoReserva estadoReserva;
 
     //Relacion con objeto
     @OneToMany
     @JoinColumn(name = "fk_reserva_id")
-    private List<Objeto> objetoList = new ArrayList<Objeto>();
+   @JsonProperty("objetos") // Esto mapea la propiedad "objetos" del JSON a objetoList
+    private List<Objeto> objetoList = new ArrayList<>();
 
     //Relacion con Casillero
     @ManyToOne(cascade = CascadeType.DETACH)

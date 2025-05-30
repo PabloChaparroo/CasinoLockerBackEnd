@@ -1,5 +1,7 @@
 package com.CasinoLocker.BackEnd.DTO;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +21,5 @@ public class UsuarioModifyDTO {
     int dniUsuario;
     String descripcionUsuario;
     String emailUsuario;
+    LocalDate fechaHoraModificacionUsuario;
 }

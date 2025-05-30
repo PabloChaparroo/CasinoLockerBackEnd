@@ -2,13 +2,19 @@ package com.CasinoLocker.BackEnd.Controllers;
 
 import com.CasinoLocker.BackEnd.DTO.UsuarioDTO;
 import com.CasinoLocker.BackEnd.DTO.UsuarioModifyDTO;
+import com.CasinoLocker.BackEnd.DTO.UsuarioTablaDTO;
+import com.CasinoLocker.BackEnd.Entitys.Casillero;
 import com.CasinoLocker.BackEnd.Entitys.Usuario;
 import com.CasinoLocker.BackEnd.Services.UsuarioServiceImpl;
+
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -77,5 +83,26 @@ public class UsuarioController extends BaseControllerImpl<Usuario, UsuarioServic
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(("{\"error\": \"" + e.getMessage() + "\"}"));
         }
     }
+
+     @PutMapping("/restaurar/{id}")
+    public ResponseEntity<?> restaurarUsuario(@PathVariable Long id) {
+        try {
+            Usuario resultado = servicio.restaurarUsuario(id);
+            return ResponseEntity.ok(resultado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/tabla")
+public ResponseEntity<?> getUsuariosTabla() {
+    try {
+        List<UsuarioTablaDTO> dtos = servicio.getUsuariosTabla();
+        return ResponseEntity.ok(dtos);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", e.getMessage()));
+    }
+}
 
 }

@@ -38,50 +38,26 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 //Rutas publicas:
-
-                                .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll() //HABILITACION GLOBAL
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
-                                //.requestMatchers(new AntPathRequestMatcher("api/v1/mueble")).hasAuthority("CLIENTE")
-                                //.requestMatchers(new AntPathRequestMatcher("api/v1/categoria")).hasAuthority("CLIENTE")
-                                //.requestMatchers(HttpMethod.PUT , "/api/v1/categoria").hasAuthority("CLIENTE")
+                                //.requestMatchers(new AntPathRequestMatcher("api/casilleros")).hasAnyAuthority("EMPLEADO", "ADMIN")
+                                //.requestMatchers(new AntPathRequestMatcher("api/perchas")).hasAnyAuthority("EMPLEADO", "ADMIN")
+                           
 
 
-
-                                .requestMatchers(new AntPathRequestMatcher("/auth/register")).permitAll() //Registro Cliente
-                                /*
-                               .requestMatchers(new AntPathRequestMatcher("/auth/login")).permitAll() //Login general
-                               .requestMatchers(new AntPathRequestMatcher("/api/v1/articuloInsumo/paged")).permitAll() //de articuloInsumo
-                               .requestMatchers(new AntPathRequestMatcher("api/v1/articuloInsumo/searchByNombre")).permitAll()
-                               .requestMatchers(new AntPathRequestMatcher("api/v1/articuloInsumo/searchByRubroNombre")).permitAll()
-                               .requestMatchers(new AntPathRequestMatcher("/api/v1/articuloManufacturado/paged")).permitAll() //de articuloManufacturado
-                               .requestMatchers(new AntPathRequestMatcher("/api/v1/articuloManufacturado/{id}")).permitAll()
-
-                               .requestMatchers(new AntPathRequestMatcher("api/v1/articuloManufacturado/searchByNombre")).permitAll()
-                               .requestMatchers(new AntPathRequestMatcher("api/v1/articuloManufacturado/searchByPrecioVentaRange")).permitAll()
-                               .requestMatchers(new AntPathRequestMatcher("api/v1/articuloManufacturado/searchByCategoriaNombre")).permitAll()
-                               .requestMatchers(new AntPathRequestMatcher("/api/v1/DetalleProductoManufacturado/paged")).permitAll() //de DetalleProductoManufacturado
-                               .requestMatchers(new AntPathRequestMatcher("/api/v1/rubro/paged")).permitAll() //de rubro
-                               .requestMatchers(new AntPathRequestMatcher("/api/v1/rubro/searchByNombre")).permitAll()
-                               .requestMatchers(new AntPathRequestMatcher("/api/v1/CategoriaArticuloManufacturado/paged")).permitAll() //de categoriaArticuloManufacturado
-                               .requestMatchers(new AntPathRequestMatcher("/api/v1/Localidad/paged")).permitAll() //de Localidad
-                               .requestMatchers(new AntPathRequestMatcher("/api/v1/UnidadMedida/paged")).permitAll() //de UnidadMedida
-
-                               //TEST
-                               .requestMatchers(new AntPathRequestMatcher("/api/v1/pedido/paged")).permitAll() //de pedido
-                               .requestMatchers(new AntPathRequestMatcher("/api/v1/factura/paged")).permitAll() //de factura
-
-                                */
+                                //Permitir registrar solo el administrador
+                                //.requestMatchers(new AntPathRequestMatcher("/auth/register")).hasAnyAuthority("ADMIN") //Registro Administrador
 
 
+                                //Todos pueden loguearse
+                                //.requestMatchers(new AntPathRequestMatcher("/auth/login")).permitAll()
+                                //.requestMatchers(new AntPathRequestMatcher("/api/usuarios/showProfile")).permitAll()
+                                
+                               
 
-                                //Segun el rol
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/showProfile")).hasAnyAuthority( "USUARIO")
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/updateProfile")).hasAnyAuthority("USUARIO")
 
-                                .requestMatchers(new AntPathRequestMatcher("/auth/registerEmployee")).hasAuthority("ADMIN") //Autenticacion
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/modifyusuario")).hasAuthority("ADMIN")
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/deleteusuario")).hasAuthority("ADMIN")
+                                //.requestMatchers(new AntPathRequestMatcher("/auth/registerEmployee")).hasAuthority("ADMIN") //Autenticacion
+                                //.requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/modifyusuario")).hasAuthority("ADMIN")
+                                //.requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/deleteusuario")).hasAuthority("ADMIN")
 
 
                 )
@@ -113,8 +89,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
-        configuration.setAllowCredentials(false);
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:5173"));
+        configuration.setAllowCredentials(true);// Si usas cookies o auth
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

@@ -5,6 +5,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name ="objeto")
 @Data
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -31,4 +33,9 @@ public class Objeto extends BaseEntity{
 
     @Column(name = "fecha_baja_objeto")
     private LocalDate fechaBajaObjeto;
+
+    public void setReserva(Reserva reservaGuardada) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setReserva'");
+    }
 }
