@@ -6,6 +6,7 @@ import com.CasinoLocker.BackEnd.Services.CasilleroServiceImpl;
 import com.CasinoLocker.BackEnd.Services.ReservaServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -66,6 +67,17 @@ public ResponseEntity<?> getReservaByCasillero(@PathVariable Long idCasillero) {
             return ResponseEntity.ok(service.obtenerReservasActivasDTO());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\":\"Error al obtener reservas activas\"}");
+        }
+    }
+    @GetMapping("reservaPorPercha/{idPercha}")
+    public ResponseEntity<?> getReservaByPercha(@PathVariable Long idPercha) {
+        try {
+            Reserva reserva = service.findReservaReservadaByIdPercha(idPercha);
+            return ResponseEntity.status(HttpStatus.OK).body(reserva);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Reserva no encontrada\"}");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\":\"Error al buscar la reserva\"}");
         }
     }
 

@@ -22,4 +22,6 @@ public interface ReservaRepository extends BaseRepository<Reserva,Long> {
     @Query("SELECT r FROM Reserva r WHERE r.casillero.id = :idCasillero AND r.estadoReserva = com.CasinoLocker.BackEnd.Enum.EstadoReserva.Reservado")
     Optional<Reserva> findReservadaByCasilleroId(@Param("idCasillero") Long idCasillero);
     List<Reserva> findByEstadoReserva(EstadoReserva estado);
+    @Query("SELECT r FROM Reserva r WHERE r.percha.id = :idPercha AND r.estadoReserva = com.CasinoLocker.BackEnd.Enum.EstadoReserva.Reservado")
+    Optional<Reserva> findReservadaByPerchaId(@Param("idPercha") Long idPercha);
 }

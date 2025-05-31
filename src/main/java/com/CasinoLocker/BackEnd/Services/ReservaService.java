@@ -15,5 +15,7 @@ Reserva findReservaReservadaByIdCasillero(Long idCasillero);
 
 Reserva finalizarReserva(Long idReserva) throws Exception;
 List<ReservaDTO> obtenerReservasActivasDTO();
+Reserva findReservaReservadaByIdPercha(Long idPercha);
+
 
 }
