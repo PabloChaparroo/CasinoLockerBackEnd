@@ -16,6 +16,15 @@ public class EstadoCasilleroPerchaController extends BaseControllerImpl<EstadoCa
     @Autowired
     private EstadoCasilleroPerchaServiceImpl service;
 
+    @PostMapping("/crear")
+    public ResponseEntity<?> crearEstado(@RequestBody EstadoCasilleroPercha estado) {
+        try {
+            EstadoCasilleroPercha nuevoEstado = service.createEstado(estado);
+            return ResponseEntity.ok(nuevoEstado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
     @PutMapping("/darDeBaja/{id}")
     public ResponseEntity<?> darDeBaja(@PathVariable Long id) {
         try {

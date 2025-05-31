@@ -2,8 +2,10 @@ package com.CasinoLocker.BackEnd.Repositories;
 
 import com.CasinoLocker.BackEnd.Entitys.Reserva;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.CasinoLocker.BackEnd.Enum.EstadoReserva;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -19,4 +21,5 @@ public interface ReservaRepository extends BaseRepository<Reserva,Long> {
    
     @Query("SELECT r FROM Reserva r WHERE r.casillero.id = :idCasillero AND r.estadoReserva = com.CasinoLocker.BackEnd.Enum.EstadoReserva.Reservado")
     Optional<Reserva> findReservadaByCasilleroId(@Param("idCasillero") Long idCasillero);
+    List<Reserva> findByEstadoReserva(EstadoReserva estado);
 }

@@ -1,5 +1,6 @@
 package com.CasinoLocker.BackEnd.Services;
 
+import com.CasinoLocker.BackEnd.DTO.ReservaDTO;
 import com.CasinoLocker.BackEnd.Entitys.Casillero;
 import com.CasinoLocker.BackEnd.Entitys.EstadoCasilleroPercha;
 import com.CasinoLocker.BackEnd.Entitys.Objeto;
@@ -11,6 +12,8 @@ import com.CasinoLocker.BackEnd.Repositories.EstadoCasilleroPerchaRepository;
 import com.CasinoLocker.BackEnd.Repositories.ObjetoRepository;
 import com.CasinoLocker.BackEnd.Repositories.ReservaRepository;
 
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
@@ -93,6 +96,34 @@ public Reserva createReserva(Reserva reserva) throws Exception {
         casilleroRepository.save(casillero);
 
         return reservaRepository.save(reserva);
+    }
+    @Override
+    public List<ReservaDTO> obtenerReservasActivasDTO() {
+        List<Reserva> reservas = reservaRepository.findByEstadoReserva(EstadoReserva.Reservado);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
+
+        return reservas.stream().map(reserva -> {
+            String fechaFormateada = reserva.getFechaAltaReserva().format(formatter);
+            int cantidadObjetos = reserva.getObjetoList() != null ? reserva.getObjetoList().size() : 0;
+
+            String ubicacion = "";
+            if (reserva.getCasillero() != null) {
+                ubicacion = reserva.getCasillero().getNumeroCasillero() + " - Casillero";
+            } else if (reserva.getPercha() != null) {
+                ubicacion = reserva.getPercha().getNumeroPercha() + " - Percha";
+            }
+
+            String cliente = reserva.getCliente() != null ? reserva.getCliente().getNombreCliente() : "Desconocido";
+
+            return new ReservaDTO(
+                    reserva.getId(),
+                    reserva.getNumeroReserva(),
+                    fechaFormateada,
+                    cantidadObjetos,
+                    ubicacion,
+                    cliente
+            );
+        }).toList();
     }
 
 }

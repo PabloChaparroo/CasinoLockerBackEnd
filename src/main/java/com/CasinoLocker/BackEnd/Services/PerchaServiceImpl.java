@@ -75,4 +75,14 @@ public class PerchaServiceImpl implements PerchaService {
         percha.setEstadoCasilleroPercha(estadoDisponible);
         return perchaRepository.save(percha);
     }
+    @Override
+    public List<Percha> saveAll(List<Percha> perchas) throws Exception {
+        try {
+            // Si deseas que se limpien los IDs para asegurar inserción:
+            perchas.forEach(p -> p.setId(null));
+            return perchaRepository.saveAll(perchas);
+        } catch (Exception e) {
+            throw new Exception("Error al guardar todas las perchas: " + e.getMessage());
+        }
+    }
 }

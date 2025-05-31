@@ -50,4 +50,12 @@ public class PerchaController  {
     public ResponseEntity<Percha> darDeAlta(@PathVariable Long id) {
         return ResponseEntity.ok(perchaService.darDeAlta(id));
     }
+    @PostMapping("/saveAll")
+    public ResponseEntity<?> saveAll(@RequestBody List<Percha> perchas) {
+        try {
+            return ResponseEntity.ok(perchaService.saveAll(perchas));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al guardar las perchas: " + e.getMessage());
+        }
+    }
 }

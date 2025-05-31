@@ -13,4 +13,5 @@ public interface PerchaService {
     Percha darDeBaja(Long id);
     Percha darDeAlta(Long id);
     List<Percha> findAllActivas();
+    List<Percha> saveAll(List<Percha> perchas) throws Exception;
 }

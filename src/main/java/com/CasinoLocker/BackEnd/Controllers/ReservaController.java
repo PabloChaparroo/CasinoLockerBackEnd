@@ -60,6 +60,13 @@ public ResponseEntity<?> getReservaByCasillero(@PathVariable Long idCasillero) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error al finalizar la reserva\"}");
         }
     }
-
+    @GetMapping("/activas")
+    public ResponseEntity<?> getReservasActivas() {
+        try {
+            return ResponseEntity.ok(service.obtenerReservasActivasDTO());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\":\"Error al obtener reservas activas\"}");
+        }
+    }
 
 }

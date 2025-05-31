@@ -61,6 +61,9 @@ public class Reserva extends BaseEntity {
     @JoinColumn(name = "fk_cliente_id")
     private Cliente cliente;
 
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "fk_percha_id")
+    private  Percha percha;
     //Relacion con AbrigoPercha
     //@OneToMany
     //@JoinColumn(name = "fk_reserva_id")
