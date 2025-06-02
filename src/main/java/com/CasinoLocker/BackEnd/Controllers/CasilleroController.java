@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -55,5 +56,9 @@ public class CasilleroController extends BaseControllerImpl<Casillero, Casillero
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
+    }
+    @GetMapping("/casilleros-objeto-perdido")
+    public ResponseEntity<List<Casillero>> getCasillerosObjetoPerdido() {
+        return ResponseEntity.ok(service.obtenerCasillerosObjetoPerdido());
     }
 }

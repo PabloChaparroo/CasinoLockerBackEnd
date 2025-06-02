@@ -30,15 +30,18 @@ public class ConfObjetoPerdido extends BaseEntity {
     private LocalDateTime fechaBajaConfObjetoPerdido;
 
     //Relacion con objeto
-    @OneToMany
+    /*@OneToMany
     @JoinColumn(name = "fk_confObjetoPerdido_id")
-    private List<Objeto> objetos = new ArrayList<>();
+    private List<Objeto> objetos = new ArrayList<>();*/
 
     //Relacion con Casillero
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "fk_casillero_id")
     private Casillero casillero;
 
+    @OneToMany(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "fk_conf_objeto_perdido_id")
+    private List<Reserva> reservas = new ArrayList<>();
 
 
 }

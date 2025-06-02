@@ -81,4 +81,8 @@ public class CasilleroServiceImpl extends BaseServiceImpl<Casillero,Long> implem
         Casillero casilleroExistente = findById(id);
         repository.delete(casilleroExistente);
     }
+    @Override
+    public List<Casillero> obtenerCasillerosObjetoPerdido() {
+        return repository.findCasillerosDeObjetosPerdidos();
+    }
 }

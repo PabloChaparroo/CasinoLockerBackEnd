@@ -16,4 +16,5 @@ public interface CasilleroService extends BaseService<Casillero,Long>{
     Casillero darDeBajaCasillero(Long id) throws Exception;
     Casillero restaurarCasillero(Long id) throws Exception;
     void deleteCasillero(Long id) throws Exception;
+    List<Casillero> obtenerCasillerosObjetoPerdido();
 }
