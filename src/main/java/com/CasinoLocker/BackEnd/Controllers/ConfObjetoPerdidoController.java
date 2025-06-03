@@ -1,5 +1,6 @@
 package com.CasinoLocker.BackEnd.Controllers;
 
+import com.CasinoLocker.BackEnd.DTO.ConfObjetoPerdidoDetalleDTO;
 import com.CasinoLocker.BackEnd.DTO.CrearConfObjetoPerdidoDTO;
 import com.CasinoLocker.BackEnd.Entitys.Casillero;
 import com.CasinoLocker.BackEnd.Entitys.ConfObjetoPerdido;
@@ -27,4 +28,16 @@ public class ConfObjetoPerdidoController extends BaseControllerImpl<ConfObjetoPe
         return ResponseEntity.ok(conf);
     }
 
-   }
+    @GetMapping("/detalle/casillero/{idCasillero}")
+    public ResponseEntity<ConfObjetoPerdidoDetalleDTO> obtenerDetallePorIdCasillero(@PathVariable Long idCasillero) {
+        ConfObjetoPerdidoDetalleDTO detalle = confObjetoPerdidoService.obtenerDetallePorIdCasillero(idCasillero);
+        return ResponseEntity.ok(detalle);
+    }
+
+    @PostMapping("/despachar")
+    public ResponseEntity<String> despacharReserva(@RequestParam Long idReserva) {
+        confObjetoPerdidoService.despacharReserva(idReserva);
+        return ResponseEntity.ok("Reserva despachada correctamente");
+    }
+
+}

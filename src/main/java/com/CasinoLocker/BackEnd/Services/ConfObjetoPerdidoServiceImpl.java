@@ -1,5 +1,6 @@
 package com.CasinoLocker.BackEnd.Services;
 
+import com.CasinoLocker.BackEnd.DTO.ConfObjetoPerdidoDetalleDTO;
 import com.CasinoLocker.BackEnd.Entitys.*;
 import com.CasinoLocker.BackEnd.Enum.EstadoReserva;
 import com.CasinoLocker.BackEnd.Repositories.*;
@@ -66,8 +67,16 @@ public class ConfObjetoPerdidoServiceImpl extends BaseServiceImpl<ConfObjetoPerd
         }
 
         if (confExistente != null) {
+            // Solo agregar la reserva si no existe ya una reserva con estado Objetos_Perdidos en la lista
+            boolean yaTieneReservaActiva = confExistente.getReservas().stream()
+                .anyMatch(r -> r.getEstadoReserva() == EstadoReserva.Objetos_Perdidos);
             confExistente.getReservas().add(reserva);
             reservaRepo.save(reserva);
+            // Si no hay reservas activas, poner el casillero en Ocupado
+            if (!yaTieneReservaActiva) {
+                casilleroDestino.setEstadoCasilleroPercha(ocupado);
+                casilleroRepo.save(casilleroDestino);
+            }
             return confObjetoPerdidoRepository.save(confExistente);
         }
 
@@ -83,6 +92,79 @@ public class ConfObjetoPerdidoServiceImpl extends BaseServiceImpl<ConfObjetoPerd
 
         reservaRepo.save(reserva);
         return confObjetoPerdidoRepository.save(nuevaConf);
+    }
+
+    @Override
+    public ConfObjetoPerdidoDetalleDTO obtenerDetallePorIdCasillero(Long idCasillero) {
+        ConfObjetoPerdido conf = confObjetoPerdidoRepository.findByCasilleroId(idCasillero)
+                .orElseThrow(() -> new RuntimeException("No se encontró configuración para el casillero"));
+
+        java.util.List<ConfObjetoPerdidoDetalleDTO.ReservaDetalleDTO> reservasDTO = new java.util.ArrayList<>();
+        for (Reserva reserva : conf.getReservas()) {
+            if (reserva.getEstadoReserva() != EstadoReserva.Objetos_Perdidos) continue;
+            String clienteNombre = reserva.getCliente() != null ? reserva.getCliente().getNombreCliente() : "";
+            String ubicacion;
+            if (reserva.getCasillero() != null) {
+                ubicacion = "Casillero N° " + reserva.getCasillero().getNumeroCasillero();
+            } else if (reserva.getPercha() != null) {
+                ubicacion = "Percha N° " + reserva.getPercha().getNumeroPercha();
+            } else {
+                ubicacion = "Sin ubicación";
+            }
+            String fechaHoraReserva = reserva.getFechaAltaReserva() != null ?
+                    reserva.getFechaAltaReserva().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")) : "";
+            java.util.List<ConfObjetoPerdidoDetalleDTO.ObjetoDTO> objetos = new java.util.ArrayList<>();
+            if (reserva.getObjetoList() != null) {
+                for (var obj : reserva.getObjetoList()) {
+                    objetos.add(ConfObjetoPerdidoDetalleDTO.ObjetoDTO.builder()
+                            .numeroObjeto(obj.getNumeroObjeto())
+                            .descripcionObjeto(obj.getDescripcionObjeto())
+                            .build());
+                }
+            }
+            reservasDTO.add(ConfObjetoPerdidoDetalleDTO.ReservaDetalleDTO.builder()
+                    .idReserva(reserva.getId())
+                    .clienteNombre(clienteNombre)
+                    .ubicacion(ubicacion)
+                    .fechaHoraReserva(fechaHoraReserva)
+                    .objetos(objetos)
+                    .build());
+        }
+        return ConfObjetoPerdidoDetalleDTO.builder()
+                .reservas(reservasDTO)
+                .build();
+    }
+
+    @Override
+    public void despacharReserva(Long idReserva) {
+        Reserva reserva = reservaRepo.findById(idReserva)
+                .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+
+        // Buscar la configuración de objeto perdido que contiene esta reserva
+        ConfObjetoPerdido conf = confObjetoPerdidoRepository.findAll().stream()
+                .filter(c -> c.getReservas().stream().anyMatch(r -> r.getId().equals(idReserva)))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("ConfObjetoPerdido no encontrada para la reserva"));
+
+        // Cambiar estado y fecha de la reserva
+        reserva.setEstadoReserva(EstadoReserva.Finalizado);
+        reserva.setFechaFinalizacionReserva(java.time.LocalDateTime.now());
+        reservaRepo.save(reserva);
+
+        // Cambiar fecha retirada en la conf
+        conf.setFechaBajaConfObjetoPerdido(java.time.LocalDateTime.now());
+
+        // Si es la última reserva con estado Objetos_Perdidos, cambiar estado del casillero a Disponible
+        boolean ultima = conf.getReservas().stream()
+                .filter(r -> r.getEstadoReserva() == EstadoReserva.Objetos_Perdidos)
+                .count() == 0;
+        if (ultima && conf.getCasillero() != null) {
+            EstadoCasilleroPercha disponible = estadoCasilleroPerchaRepository.findByNombreEstadoCasilleroPercha("Disponible")
+                    .orElseThrow(() -> new RuntimeException("Estado 'Disponible' no encontrado"));
+            conf.getCasillero().setEstadoCasilleroPercha(disponible);
+            casilleroRepo.save(conf.getCasillero());
+        }
+        confObjetoPerdidoRepository.save(conf);
     }
 
 }
