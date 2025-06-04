@@ -4,6 +4,7 @@ import com.CasinoLocker.BackEnd.Entitys.Casillero;
 import com.CasinoLocker.BackEnd.Entitys.Reserva;
 import com.CasinoLocker.BackEnd.Services.CasilleroServiceImpl;
 import com.CasinoLocker.BackEnd.Services.ReservaServiceImpl;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -78,6 +80,35 @@ public ResponseEntity<?> getReservaByCasillero(@PathVariable Long idCasillero) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Reserva no encontrada\"}");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\":\"Error al buscar la reserva\"}");
+        }
+    }
+    @GetMapping("/reporte")
+    public ResponseEntity<?> getReservasEntreFechas(
+            @RequestParam("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) java.time.LocalDateTime desde,
+            @RequestParam("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) java.time.LocalDateTime hasta) {
+        try {
+            return ResponseEntity.ok(service.buscarReservasEntreFechas(desde, hasta));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\":\"Error al obtener reservas por fechas\"}");
+        }
+    }
+    @PutMapping("/saveAll")
+    public ResponseEntity<?> saveAll(@RequestBody java.util.List<Reserva> reservas) throws Exception {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(service.saveAll(reservas));
+        } catch (Exception e) {
+            throw new Exception("Error al guardar los datos: " + e.getMessage());
+        }
+    }
+    @GetMapping("/reportePorCliente")
+    public ResponseEntity<?> getReservasPorClienteYFechas(
+            @RequestParam("idCliente") Long idCliente,
+            @RequestParam("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) java.time.LocalDateTime desde,
+            @RequestParam("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) java.time.LocalDateTime hasta) {
+        try {
+            return ResponseEntity.ok(service.buscarReservasPorClienteYFechas(idCliente, desde, hasta));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\":\"Error al obtener reservas por cliente y fechas\"}");
         }
     }
 
