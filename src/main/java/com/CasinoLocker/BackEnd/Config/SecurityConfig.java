@@ -35,29 +35,32 @@ public class SecurityConfig {
     {
         return http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 //Rutas publicas:
                                 .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
-                                //.requestMatchers(new AntPathRequestMatcher("api/casilleros")).hasAnyAuthority("EMPLEADO", "ADMIN")
-                                //.requestMatchers(new AntPathRequestMatcher("api/perchas")).hasAnyAuthority("EMPLEADO", "ADMIN")
-                           
 
+                                /* 
+                                //Permisos EMPLEADO_CASILLERO_PERCHA
+                                .requestMatchers(new AntPathRequestMatcher("/api/casilleros/**")).hasAnyAuthority("EMPLEADO_CASILLERO_PERCHA","ADMIN")
+                                .requestMatchers(new AntPathRequestMatcher("/api/perchas/**")).hasAnyAuthority("EMPLEADO_CASILLERO_PERCHA","ADMIN")
 
-                                //Permitir registrar solo el administrador
-                                //.requestMatchers(new AntPathRequestMatcher("/auth/register")).hasAnyAuthority("ADMIN") //Registro Administrador
-
-
-                                //Todos pueden loguearse
-                                //.requestMatchers(new AntPathRequestMatcher("/auth/login")).permitAll()
-                                //.requestMatchers(new AntPathRequestMatcher("/api/usuarios/showProfile")).permitAll()
+                                //Permisos ADMIN
+                                .requestMatchers(new AntPathRequestMatcher("/auth/register")).hasAnyAuthority("ADMIN") 
+                                .requestMatchers(new AntPathRequestMatcher("/auth/registerEmployee")).hasAnyAuthority("ADMIN")
+                                .requestMatchers(new AntPathRequestMatcher("/api/usuarios/tabla")).hasAnyAuthority("ADMIN")
+                                .requestMatchers(new AntPathRequestMatcher("/api/usuarios/restaurar/")).hasAnyAuthority("ADMIN")
+                                .requestMatchers(new AntPathRequestMatcher("/api/usuarios/updateProfile/")).hasAnyAuthority("ADMIN")
+                                .requestMatchers(new AntPathRequestMatcher("/api/tipo_casilleros/**")).hasAnyAuthority("ADMIN")
+                                .requestMatchers(new AntPathRequestMatcher("/api/estado_casillero_percha/**")).hasAnyAuthority("ADMIN")
+                                //Permitir a todos                                
+                                .requestMatchers(new AntPathRequestMatcher("/auth/login")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/api/usuarios/showProfile")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/api/clientes/**")).permitAll()
+                                */
                                 
-                               
-
-
-                                //.requestMatchers(new AntPathRequestMatcher("/auth/registerEmployee")).hasAuthority("ADMIN") //Autenticacion
-                                //.requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/modifyusuario")).hasAuthority("ADMIN")
-                                //.requestMatchers(new AntPathRequestMatcher("/api/v1/usuario/deleteusuario")).hasAuthority("ADMIN")
+                            
 
 
                 )
@@ -70,20 +73,8 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-    /*
-        @Bean
-        CorsConfigurationSource corsConfigurationSource() {
-            CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedHeaders(List.of("Authorization", "Access-Control-Allow-Origin", "Content-Type",
-                    "X-Requested-With", "accept", "Origin", " Access-Control-Request-Method",
-                    "Access-Control-Request-Headers"));
-            configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
-            configuration.setAllowedOrigins(List.of("http://localhost:8080"));
-            configuration.setAllowCredentials(false);
-            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-            source.registerCorsConfiguration("/**", configuration);
-            return source;
-        }*/
+  
+    //Cors para conectarse con el front, fijarse bien las rutas permitidas y CRUD permitidos
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterEmployeeRequest {
+
+    int id;
     String username;
-    String provisionalPassword;
+    String password;
     int idRole;
 
     int dniEmpleado;

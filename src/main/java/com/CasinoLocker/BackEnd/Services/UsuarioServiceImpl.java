@@ -105,6 +105,12 @@ public class UsuarioServiceImpl extends BaseServiceImpl<Usuario,Long> implements
     public Usuario modifyUsuario(UsuarioModifyDTO usuarioModifyDTO) throws Exception {
         try {
             Usuario usuarioExistente = findById(usuarioModifyDTO.getIdUsuario());
+            // 2. Busca el perfil relacionado
+            Perfil perfilRelacionado = perfilRepository.findPerfilByUsuarioId(usuarioModifyDTO.getIdUsuario());
+            if (perfilRelacionado == null) {
+                throw new Exception("Perfil no encontrado para el usuario");
+            }
+
             System.out.println("##################Usuario: "+usuarioExistente.getId()+usuarioExistente.getNombreUsuario());
 
             usuarioExistente.setNombreUsuario(usuarioModifyDTO.getNombreUsuario());
@@ -112,6 +118,13 @@ public class UsuarioServiceImpl extends BaseServiceImpl<Usuario,Long> implements
             usuarioExistente.setTelefonoUsuario(usuarioModifyDTO.getTelefonoUsuario());
             usuarioExistente.setDescripcionUsuario(usuarioModifyDTO.getDescripcionUsuario());
             usuarioExistente.setEmailUsuario(usuarioModifyDTO.getEmailUsuario());
+
+            // Convertir el int a Role
+                Role role = Role.fromValorNumerico(usuarioModifyDTO.getIdRole());
+                if (role == null) {
+                    throw new Exception("Rol inválido: " + usuarioModifyDTO.getIdRole());
+                }
+            perfilRelacionado.setRole(role); 
             usuarioExistente.setFechaModificacionUsuario(LocalDate.now());
 
             /*

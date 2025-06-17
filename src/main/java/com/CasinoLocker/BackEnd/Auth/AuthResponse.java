@@ -1,5 +1,7 @@
 package com.CasinoLocker.BackEnd.Auth;
 
+import com.CasinoLocker.BackEnd.Enum.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +20,6 @@ public class AuthResponse {
     String emailUsuario;
     int dniUsuario;
     int telefonoUsuario;
+    Role role;
 
 }

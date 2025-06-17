@@ -1,7 +1,6 @@
 package com.CasinoLocker.BackEnd.Repositories;
 
 import com.CasinoLocker.BackEnd.Entitys.EstadoCasilleroPercha;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

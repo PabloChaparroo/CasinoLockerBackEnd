@@ -53,6 +53,8 @@ public class AuthService {
             .build();
 }
 
+//Usamos este registro en el caso de tener usuarios, NO ES NUESTRO CASO ya que solo tenemos empleados
+//Hay que cambiar el Role a cliente o usuarios, en este caso está como ADMIN y no es correcto pero nosotros no lo usamos
     public AuthResponse register(RegisterRequest request) {
 
         Usuario usuario = Usuario.builder()
@@ -70,7 +72,7 @@ public class AuthService {
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .fechaAltaPerfil(LocalDate.now())
-                .role(Role.EMPLEADO)
+                .role(Role.ADMIN) 
                 .build();
 
         user.setUsuario(usuario);
@@ -89,6 +91,11 @@ public class AuthService {
     }
 
     public AuthResponse registerEmployee(RegisterEmployeeRequest request) {
+        // Validar que el rol exista
+        Role role = Role.fromValorNumerico(request.getIdRole());
+        if (role == null) {
+            throw new IllegalArgumentException("Rol inválido: " + request.getIdRole());
+        }
 
 
         Usuario usuario = Usuario.builder()
@@ -103,9 +110,9 @@ public class AuthService {
 
         Perfil user = Perfil.builder()
                 .username(request.getUsername())
-                .password(passwordEncoder.encode(request.provisionalPassword))
+                .password(passwordEncoder.encode(request.password))
                 .fechaAltaPerfil(LocalDate.now())
-                .role(Role.EMPLEADO) //ver numeracion de roles
+                .role(role) //ver numeracion de roles
                 .build();
 
         user.setUsuario(usuario);
@@ -119,6 +126,7 @@ public class AuthService {
                 .dniUsuario(user.getUsuario().getDniUsuario())
                 .emailUsuario(user.getUsuario().getEmailUsuario())
                 .telefonoUsuario(user.getUsuario().getTelefonoUsuario())
+                .role(user.getRole())
                 .build();
 
     }
